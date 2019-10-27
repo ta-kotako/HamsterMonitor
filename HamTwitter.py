@@ -5,8 +5,17 @@ import picamera
 import os
 #import subprocess
 
+from findHam import findHam 
+
 from twython import Twython
 from auth import (
+    consumer_key,
+    consumer_secret,
+    access_token,
+    access_token_secret
+)
+
+twitter = Twython(
     consumer_key,
     consumer_secret,
     access_token,
@@ -21,12 +30,7 @@ with picamera.PiCamera() as camera:
  time.sleep(1)
  camera.capture('my_picture.jpg')
  
-twitter = Twython(
-    consumer_key,
-    consumer_secret,
-    access_token,
-    access_token_secret
-)
+findHam()
 
 #CPU remperature
 #temp = subprocess.getoutput("vcgencmd measure_temp").split('=')
@@ -35,7 +39,7 @@ line = os.popen(cmd).readline().strip()
 temp = line.split('=')[1].split("'")[0]
 
 #message = "Hello world - here's a picture!" 
-photo = open('my_picture.jpg','rb')
+photo = open('findHam.jpg','rb')
 response = twitter.upload_media(media=photo)
 twitter.update_status(status=temp,  media_ids=[response['media_id']])
  
